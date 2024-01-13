@@ -1,0 +1,536 @@
+(***********************************************************************
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used on any computer system with Mathematica 3.0,
+MathReader 3.0, or any compatible application. The data for the notebook 
+starts with the line of stars above.
+
+To get the notebook into a Mathematica-compatible application, do one of 
+the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing the 
+word CacheID, otherwise Mathematica-compatible applications may try to 
+use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+***********************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[     14659,        408]*)
+(*NotebookOutlinePosition[     15715,        444]*)
+(*  CellTagsIndexPosition[     15671,        440]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+
+
+Cell[CellGroupData[{Cell[TextData["<<einsteintensor.m"], "Input"],
+
+Cell[TextData["{EinsteinTensor}"], "Print",
+  Evaluatable->False]}, Open]],
+
+Cell[CellGroupData[{Cell[TextData["(* Spherical coordinates: *)\nx = {t,r,theta,phi}"], "Input"],
+
+Cell[OutputFormData["\<\
+{t, r, theta, phi}\
+\>", 
+"\<\
+{t, r, theta, phi}\
+\>"], "Output",
+  Evaluatable->False]}, Open]],
+
+Cell[CellGroupData[{Cell[TextData[
+"(* The Schwarzschild metric: *)\n(metric =\n  DiagonalMatrix[{-Exp[2 ny[r]], \
+Exp[2 lambda[r]], r^2,\n                  (r Sin[theta])^2}]) //MatrixForm"], 
+  "Input"],
+
+Cell[OutputFormData[
+"\<\
+MatrixForm[{{-E^(2*ny[r]), 0, 0, 0}, {0, E^(2*lambda[r]), 0, 0}, 
+   {0, 0, r^2, 0}, {0, 0, 0, r^2*Sin[theta]^2}}]\
+\>", "\<\
+  2 ny[r]
+-E              0               0               0
+ 
+                 2 lambda[r]
+0               E               0               0
+ 
+                                 2
+0               0               r               0
+ 
+                                                 2           2
+0               0               0               r  Sin[theta]\
+\>"], "Output",\
+
+  Evaluatable->False]}, Open]],
+
+Cell[CellGroupData[{Cell[TextData[
+"(* The following result is found in all textbooks on General\n   Relativity. \
+When the differential equations Einstein==0\n   are solved, the Schwarzschild \
+solution emerges. This cannot\n   (yet) be done using Mathematica's DSolve \
+(one gets the message\n   DSolve::NotYet!). However, the solution of the \
+equation is\n   relatively easy to do by hand, the toughest part is to \n   \
+calculate the Einstein tensor.*)\n(Einstein = \n   \
+Inverse[metric].Simplify[EinsteinTensor[metric,x]])"], "Input"],
+
+Cell[OutputFormData[
+"\<\
+{{-((-1 + E^(2*lambda[r]) + 2*r*Derivative[1][lambda][r])/
+      (E^(2*lambda[r])*r^2)), 0, 0, 0}, 
+  {0, -((-1 + E^(2*lambda[r]) - 2*r*Derivative[1][ny][r])/
+      (E^(2*lambda[r])*r^2)), 0, 0}, 
+  {0, 0, (-Derivative[1][lambda][r] + Derivative[1][ny][r] - 
+      r*Derivative[1][lambda][r]*Derivative[1][ny][r] + 
+      r*Derivative[1][ny][r]^2 + r*Derivative[2][ny][r])/
+    (E^(2*lambda[r])*r), 0}, {0, 0, 0, 
+   (-Derivative[1][lambda][r] + Derivative[1][ny][r] - 
+      r*Derivative[1][lambda][r]*Derivative[1][ny][r] + 
+      r*Derivative[1][ny][r]^2 + r*Derivative[2][ny][r])/
+    (E^(2*lambda[r])*r)}}\
+\>", "\<\
+          2 lambda[r]
+    -1 + E            + 2 r lambda'[r]
+{{-(----------------------------------), 0, 0, 0}, 
+              2 lambda[r]  2
+             E            r
+ 
+              2 lambda[r]
+        -1 + E            - 2 r ny'[r]
+  {0, -(------------------------------), 0, 0}, 
+                2 lambda[r]  2
+               E            r
+ 
+  {0, 0, 
+ 
+                                                         2
+    -lambda'[r] + ny'[r] - r lambda'[r] ny'[r] + r ny'[r]  + r ny''[r]
+    ---------, 
+                               2 lambda[r]
+                              E            r
+ 
+   0}, {0, 0, 0, 
+ 
+                                                         2
+    -lambda'[r] + ny'[r] - r lambda'[r] ny'[r] + r ny'[r]  + r ny''[r]
+    ------------------------------------------------------------------}}
+                               2 lambda[r]
+                              E            r\
+\>"], "Output",
+  Evaluatable->False]}, Open]],
+
+Cell[CellGroupData[{Cell[TextData[
+"(* Confirm that the Einstein tensor of the Schwarzschild\n   solution \
+vanishes (i.e. that the Schwarzschild solution\n   satisfies Einstein's \
+vacuum field equations): *)\n\
+EinsteinTensor[DiagonalMatrix[{-(1-2M/r),1/(1-2M/r),\n                        \
+        r^2, (r Sin[theta])^2}],\n               {t,r,theta,phi}] // \
+Simplify"], "Input"],
+
+Cell[OutputFormData[
+"\<\
+{{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}\
+\>", 
+"\<\
+{{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}\
+\>"], "Output",\
+
+  Evaluatable->False]}, Open]],
+
+Cell[CellGroupData[{Cell[TextData[
+"(* Check that the Einstein tensor of flat spacetime vanishes: *)\n\
+EinsteinTensor[DiagonalMatrix[{-1,1,1,1}],{x1,x2,x3,x4}]"], "Input"],
+
+Cell[OutputFormData[
+"\<\
+{{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}\
+\>", 
+"\<\
+{{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}\
+\>"], "Output",\
+
+  Evaluatable->False]}, Open]],
+
+Cell[TextData[
+"(* Then, consider the Kerr-Newman metric (a charged,\n   rotating black \
+hole): *)\ndelta:= r^2 - 2M r + a^2 + Q^2;\nrho2:= r^2 + a^2 Cos[theta]^2;\n\
+ds2 = -(delta/rho2)(d[0]-a Sin[theta]^2 d[3])^2 +\n      \
+(Sin[theta]^2/rho2)((r^2+a^2)d[3]-a d[0])^2 +\n      rho2 d[1]^2/delta + rho2 \
+d[2]^2;"], "Input"],
+
+Cell[CellGroupData[{Cell[TextData["ds2 = Collect[ds2,Array[d,4,0]]"], "Input"],
+
+Cell[OutputFormData[
+"\<\
+(-(Q^2/(r^2 + a^2*Cos[theta]^2)) - a^2/(r^2 + a^2*Cos[theta]^2) + 
+     (2*M*r)/(r^2 + a^2*Cos[theta]^2) - r^2/(r^2 + a^2*Cos[theta]^2) + 
+     (a^2*Sin[theta]^2)/(r^2 + a^2*Cos[theta]^2))*d[0]^2 + 
+  (r^2/(Q^2 + a^2 - 2*M*r + r^2) + 
+     (a^2*Cos[theta]^2)/(Q^2 + a^2 - 2*M*r + r^2))*d[1]^2 + 
+  (r^2 + a^2*Cos[theta]^2)*d[2]^2 + 
+  ((2*Q^2*a*Sin[theta]^2)/(r^2 + a^2*Cos[theta]^2) - 
+     (4*M*a*r*Sin[theta]^2)/(r^2 + a^2*Cos[theta]^2))*d[0]*d[3] + 
+  ((a^4*Sin[theta]^2)/(r^2 + a^2*Cos[theta]^2) + 
+     (2*a^2*r^2*Sin[theta]^2)/(r^2 + a^2*Cos[theta]^2) + 
+     (r^4*Sin[theta]^2)/(r^2 + a^2*Cos[theta]^2) - 
+     (Q^2*a^2*Sin[theta]^4)/(r^2 + a^2*Cos[theta]^2) - 
+     (a^4*Sin[theta]^4)/(r^2 + a^2*Cos[theta]^2) + 
+     (2*M*a^2*r*Sin[theta]^4)/(r^2 + a^2*Cos[theta]^2) - 
+     (a^2*r^2*Sin[theta]^4)/(r^2 + a^2*Cos[theta]^2))*d[3]^2\
+\>", 
+"\<\
+            2                      2
+           Q                      a                    2 M r
+(-(-------------------) - ------------------- + ------------------- - 
+    2    2           2     2    2           2    2    2           2
+   r  + a  Cos[theta]     r  + a  Cos[theta]    r  + a  Cos[theta]
+ 
+              2               2           2
+             r               a  Sin[theta]          2
+     ------------------- + -------------------) d[0]  + 
+      2    2           2    2    2           2
+     r  + a  Cos[theta]    r  + a  Cos[theta]
+ 
+             2                2           2
+            r                a  Cos[theta]          2
+  (-------------------- + --------------------) d[1]  + 
+    2    2            2    2    2            2
+   Q  + a  - 2 M r + r    Q  + a  - 2 M r + r
+ 
+    2    2           2      2
+  (r  + a  Cos[theta] ) d[2]  + 
+ 
+      2             2                      2
+   2 Q  a Sin[theta]     4 M a r Sin[theta]
+  (------------------- - -------------------) d[0] d[3] + 
+    2    2           2    2    2           2
+   r  + a  Cos[theta]    r  + a  Cos[theta]
+ 
+      4           2         2  2           2      4           2
+     a  Sin[theta]       2 a  r  Sin[theta]      r  Sin[theta]
+  (------------------- + ------------------- + ------------------- - 
+    2    2           2    2    2           2    2    2           2
+   r  + a  Cos[theta]    r  + a  Cos[theta]    r  + a  Cos[theta]
+ 
+       2  2           4       4           4           2             4
+      Q  a  Sin[theta]       a  Sin[theta]       2 M a  r Sin[theta]
+     ------------------- - ------------------- + -------------------- - 
+      2    2           2    2    2           2    2    2           2
+     r  + a  Cos[theta]    r  + a  Cos[theta]    r  + a  Cos[theta]
+ 
+       2  2           4
+      a  r  Sin[theta]        2
+     -------------------) d[3]
+      2    2           2
+     r  + a  Cos[theta]\
+\>"], "Output",
+  Evaluatable->False]}, Open]],
+
+Cell[CellGroupData[{Cell[TextData[
+"KerrNewman = \n  Simplify[Table[Coefficient[ds2,d[alpha]d[beta]],\n          \
+       {alpha,0,3}, {beta,0,3} ] ]"], "Input"],
+
+Cell[OutputFormData["\<\
+{{-((Q^2 + a^2 - 2*M*r + r^2 - a^2*Sin[theta]^2)/
+      (r^2 + a^2*Cos[theta]^2)), 0, 0, 
+   (2*a*(Q^2 - 2*M*r)*Sin[theta]^2)/(r^2 + a^2*Cos[theta]^2)}, 
+  {0, (r^2 + a^2*Cos[theta]^2)/(Q^2 + a^2 - 2*M*r + r^2), 0, 0}, 
+  {0, 0, r^2 + a^2*Cos[theta]^2, 0}, 
+  {(2*a*(Q^2 - 2*M*r)*Sin[theta]^2)/(r^2 + a^2*Cos[theta]^2), 0, 0, 
+   -((Sin[theta]^2*(-a^4 - 2*a^2*r^2 - r^4 + Q^2*a^2*Sin[theta]^2 + 
+          a^4*Sin[theta]^2 - 2*M*a^2*r*Sin[theta]^2 + 
+          a^2*r^2*Sin[theta]^2))/(r^2 + a^2*Cos[theta]^2))}}\
+\>", 
+"\<\
+     2    2            2    2           2
+    Q  + a  - 2 M r + r  - a  Sin[theta]
+{{-(-------------------------------------), 0, 0, 
+              2    2           2
+             r  + a  Cos[theta]
+ 
+         2                    2        2    2           2
+   2 a (Q  - 2 M r) Sin[theta]        r  + a  Cos[theta]
+   ----------------------------}, {0, --------------------, 0, 0}, 
+        2    2           2             2    2            2
+       r  + a  Cos[theta]             Q  + a  - 2 M r + r
+ 
+          2    2           2
+  {0, 0, r  + a  Cos[theta] , 0}, 
+ 
+         2                    2
+   2 a (Q  - 2 M r) Sin[theta]
+  {----------------------------, 0, 0, 
+        2    2           2
+       r  + a  Cos[theta]
+ 
+                2    4      2  2    4    2  2           2
+   -((Sin[theta]  (-a  - 2 a  r  - r  + Q  a  Sin[theta]  + 
+ 
+           4           2        2             2    2  2           2
+          a  Sin[theta]  - 2 M a  r Sin[theta]  + a  r  Sin[theta] )) / 
+ 
+        2    2           2
+      (r  + a  Cos[theta] ))}}\
+\>"], "Output",
+  Evaluatable->False]}, Open]],
+
+Cell[CellGroupData[{Cell[TextData[
+"(* Consider the limiting cases the Kerr-Newman metric:\n   The Kerr metric \
+is a non-charged Kerr-Newman: *)\nKerr = Simplify[Limit[KerrNewman,Q->0]]"], 
+  "Input"],
+
+Cell[OutputFormData[
+"\<\
+{{-((a^2 - 2*M*r + r^2 - a^2*Sin[theta]^2)/(r^2 + a^2*Cos[theta]^2)), 0, \
+
+   0, (-4*M*a*r*Sin[theta]^2)/(r^2 + a^2*Cos[theta]^2)}, 
+  {0, (r^2 + a^2*Cos[theta]^2)/(a^2 - 2*M*r + r^2), 0, 0}, 
+  {0, 0, r^2 + a^2*Cos[theta]^2, 0}, 
+  {(-4*M*a*r*Sin[theta]^2)/(r^2 + a^2*Cos[theta]^2), 0, 0, 
+   -((Sin[theta]^2*(-a^4 - 2*a^2*r^2 - r^4 + a^4*Sin[theta]^2 - 
+          2*M*a^2*r*Sin[theta]^2 + a^2*r^2*Sin[theta]^2))/
+      (r^2 + a^2*Cos[theta]^2))}}\
+\>", 
+"\<\
+     2            2    2           2                            2
+    a  - 2 M r + r  - a  Sin[theta]          -4 M a r Sin[theta]
+{{-(--------------------------------), 0, 0, --------------------}, 
+           2    2           2                 2    2           2
+          r  + a  Cos[theta]                 r  + a  Cos[theta]
+ 
+       2    2           2
+      r  + a  Cos[theta]                  2    2           2
+  {0, -------------------, 0, 0}, {0, 0, r  + a  Cos[theta] , 0}, 
+         2            2
+        a  - 2 M r + r
+ 
+                      2
+   -4 M a r Sin[theta]
+  {--------------------, 0, 0, 
+    2    2           2
+   r  + a  Cos[theta]
+ 
+                2    4      2  2    4    4           2
+   -((Sin[theta]  (-a  - 2 a  r  - r  + a  Sin[theta]  - 
+ 
+               2             2    2  2           2
+          2 M a  r Sin[theta]  + a  r  Sin[theta] )) / 
+ 
+        2    2           2
+      (r  + a  Cos[theta] ))}}\
+\>"], "Output",
+  Evaluatable->False]}, Open]],
+
+Cell[CellGroupData[{Cell[TextData[
+"(* And the Schwarzschild metric is the same as nonrotating\n   Kerr: *)\n\
+Schwarzschild = Simplify[Limit[Kerr, a->0]]"], "Input"],
+
+Cell[OutputFormData[
+"\<\
+{{-1 + (2*M)/r, 0, 0, 0}, {0, r/(-2*M + r), 0, 0}, {0, 0, r^2, 0}, 
+  {0, 0, 0, r^2*Sin[theta]^2}}\
+\>", 
+"\<\
+       2 M                   r                     2
+{{-1 + ---, 0, 0, 0}, {0, --------, 0, 0}, {0, 0, r , 0}, 
+        r                 -2 M + r
+ 
+             2           2
+  {0, 0, 0, r  Sin[theta] }}\
+\>"], "Output",
+  Evaluatable->False]}, Open]],
+
+Cell[CellGroupData[{Cell[TextData["MaxMemoryUsed[]"], "Input"],
+
+Cell[OutputFormData["\<\
+1531008\
+\>", "\<\
+1531008\
+\>"], "Output",
+  Evaluatable->False]}, Open]],
+
+Cell[TextData[
+"(* Warning: This calculation takes very long time and requires\n   plenty of \
+memory. *)\nEinstein = EinsteinTensor[KerrNewman,{t,r,theta,phi}] ;"], "Input"],
+
+Cell[CellGroupData[{Cell[TextData["MaxMemoryUsed[]"], "Input"],
+
+Cell[OutputFormData["\<\
+4950592\
+\>", "\<\
+4950592\
+\>"], "Output",
+  Evaluatable->False]}, Open]],
+
+Cell[CellGroupData[{Cell[TextData[
+"(* The expression Einstein should be zero! It is far too long\n   to be \
+simplified using Simplify! Even computing numerical\n   values takes too much \
+time on my computer. By adding \n   extra Simplify -calls in the intermediate \
+stages of\n   EinsteinTensor[], I succeeded to verify that EinsteinTensor\n   \
+vanishes for the Kerr metric (not documented in this file)*)\n\
+Einstein//Short"], "Input"],
+
+Cell[OutputFormData["\<\
+-interrupted-\
+\>", "\<\
+              r <<3>>
+{{<<4>>}, {0, ------- + <<20>>, <<1>>, 0}, <<1>>, {<<4>>}}
+              2 <<1>>\
+\>"], "Output",
+  Evaluatable->False]}, Open]],
+
+Cell[TextData[
+"(* the following calculation was interrupted by user.. *)\nEinstein /. \
+{a->1.2,Q->0.001,M->15.34, r->4.5345,theta->0.34}"], "Input"]
+},
+FrontEndVersion->"Macintosh 3.0",
+ScreenRectangle->{{0, 832}, {0, 604}},
+WindowToolbars->{},
+CellGrouping->Manual,
+WindowSize->{520, 509},
+WindowMargins->{{116, Automatic}, {15, Automatic}},
+PrivateNotebookOptions->{"ColorPalette"->{RGBColor, -1}},
+ShowCellLabel->True,
+ShowCellTags->False,
+RenderingOptions->{"ObjectDithering"->True,
+"RasterDithering"->False},
+MacintoshSystemPageSetup->"\<\
+00<0001804P000000]P2:?oQon82n@960dL5:0?l0080001804P000000]P2:001
+0000I00000400`<300000BL?00400@00000000000000060001T1T00000000000
+00000000000000000000000000000000\>"
+]
+
+
+
+(***********************************************************************
+Cached data follows.  If you edit this Notebook file directly, not using
+Mathematica, you must remove the line containing CacheID at the top of 
+the file.  The cache data will then be recreated when you save this file 
+from within Mathematica.
+***********************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[1731, 51, 45, 0, 70, "Input"],
+Cell[1779, 53, 65, 1, 70, "Print",
+  Evaluatable->False]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[1876, 56, 76, 0, 70, "Input"],
+Cell[1955, 58, 113, 6, 70, "Output",
+  Evaluatable->False]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[2100, 66, 184, 3, 70, "Input"],
+Cell[2287, 71, 547, 18, 70, "Output",
+  Evaluatable->False]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[2866, 91, 521, 7, 70, "Input"],
+Cell[3390, 100, 1651, 43, 70, "Output",
+  Evaluatable->False]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[5073, 145, 364, 6, 70, "Input"],
+Cell[5440, 153, 192, 8, 70, "Output",
+  Evaluatable->False]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[5664, 163, 152, 2, 70, "Input"],
+Cell[5819, 167, 192, 8, 70, "Output",
+  Evaluatable->False]
+}, Open  ]],
+Cell[6023, 177, 326, 5, 70, "Input"],
+
+Cell[CellGroupData[{
+Cell[6372, 184, 58, 0, 70, "Input"],
+Cell[6433, 186, 2846, 64, 70, "Output",
+  Evaluatable->False]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[9311, 252, 141, 2, 70, "Input"],
+Cell[9455, 256, 1636, 42, 70, "Output",
+  Evaluatable->False]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[11123, 300, 181, 3, 70, "Input"],
+Cell[11307, 305, 1468, 40, 70, "Output",
+  Evaluatable->False]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[12807, 347, 146, 2, 70, "Input"],
+Cell[12956, 351, 380, 13, 70, "Output",
+  Evaluatable->False]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[13368, 366, 42, 0, 70, "Input"],
+Cell[13413, 368, 90, 5, 70, "Output",
+  Evaluatable->False]
+}, Open  ]],
+Cell[13515, 375, 174, 2, 70, "Input"],
+
+Cell[CellGroupData[{
+Cell[13712, 379, 42, 0, 70, "Input"],
+Cell[13757, 381, 90, 5, 70, "Output",
+  Evaluatable->False]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[13879, 388, 421, 6, 70, "Input"],
+Cell[14303, 396, 191, 7, 70, "Output",
+  Evaluatable->False]
+}, Open  ]],
+Cell[14506, 405, 150, 2, 70, "Input"]
+}
+]
+*)
+
+
+
+
+(***********************************************************************
+End of Mathematica Notebook file.
+***********************************************************************)
